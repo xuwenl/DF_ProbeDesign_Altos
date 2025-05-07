@@ -1,0 +1,39 @@
+#!/usr/bin/perl -w
+#Use probe script with this file as ARGV[0].
+
+our $softwareDir='./opt/ppDesigner/src/';
+our $HsDir='/home/xli/reference/human/hg38/hg38Bychr/';
+
+our $exon_info_file='./t1.target';
+
+our $primerMaxLen=22;
+our $primerMinLen=17;
+our $H1_plus_H2_Len = 39; # sum of arm lengths-1
+
+our $primerMaxTm = 65;
+our $primerMinTm = 55;
+
+our $flankingLen = 0; # 221006: from 25 to 0;
+
+our $largeExonSize = 150;		# 210128 Kian: changed from 500 to 150
+
+our $targetMinLen=1;
+our $targetMaxLen=1;
+
+our $arewebisulfite=0;
+our $using_unafold=1;
+
+our $jumpFromPrevious=0; # for targets>$largeExonSize, if a probe is found in a chunk, where should should the next chunk start from. 0 corresponds to the ligation junction of the previous probe. Set to $primerMaxLen to make sure there are no overlaps
+our $jumpIf0Found=$primerMaxLen; # if a probe is not found in a chunk, how much to move the next chunk forward.
+our $maxOverlap=30; # maximum number of bases that can overlap between a probe pair
+
+
+our $NNParamFile = "$softwareDir/NN_param.txt"; # path to NN_param.txt
+
+#DO NOT CHANGE THE BELOW LINES.
+eval `cat $softwareDir/probe_parameters.pl` or die 'couldnt parse file';
+eval `cat $softwareDir/load_inputs.pl` or die 'couldnt parse file';
+eval `cat $softwareDir/get_sequence.pl` or die 'couldnt parse file';
+eval `cat $softwareDir/get_probes.pl` or die 'couldnt parse file';
+eval `cat $softwareDir/neural_net.pl` or die 'couldnt parse file';
+eval `cat $softwareDir/output_text.pl` or die 'couldnt parse file';
